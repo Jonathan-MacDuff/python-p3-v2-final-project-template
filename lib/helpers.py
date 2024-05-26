@@ -4,8 +4,11 @@ from models.villain import Villain
 
 def list_heroes():
     heroes = Hero.get_all()
-#    for hero in heroes:
-    print(heroes)
+    if heroes:
+        for hero in heroes:
+            print(hero)
+    else:
+        print("No heroes found")
 
 def add_hero():
     name = input("Enter hero name: ")
@@ -17,9 +20,6 @@ def add_hero():
     except Exception as exc:
         print(f'Error creating hero: {exc}')
         
-
-
-
 def exit_program():
     print("Goodbye!")
     exit()

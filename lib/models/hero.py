@@ -88,8 +88,28 @@ class Hero:
         return hero
     
     @classmethod
+    def instance_from_db(cls, row):
+        hero = cls.all.get(row[0])
+        abilities = json.loads(row[3])
+        if hero:
+            hero.name = row[1]
+            hero.location = row[2]
+            hero.abilities = abilities
+        else:
+            hero = cls(row[1], row[2], abilities)
+            hero.id = row[0]
+            cls.all[hero.id] = hero
+        return hero
+            
+    
+    @classmethod
     def get_all(cls):
-        return cls.all
+        sql = """
+            SELECT *
+            FROM heroes
+        """
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
     
     def update(self):
         sql = """

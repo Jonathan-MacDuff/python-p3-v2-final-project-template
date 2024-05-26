@@ -88,14 +88,28 @@ class Villain:
         return villain
     
     @classmethod
+    def instance_from_db(cls, row):
+        villain = cls.all.get(row[0])
+        abilities = json.loads(row[3])
+        if villain:
+            villain.name = row[1]
+            villain.location = row[2]
+            villain.abilities = abilities
+        else:
+            villain = cls(row[1], row[2], abilities)
+            villain.id = row[0]
+            cls.all[villain.id] = villain
+        return villain
+            
+    
+    @classmethod
     def get_all(cls):
         sql = """
             SELECT *
             FROM villains
-            WHERE id = ?
         """
-        row = CURSOR.execute(sql, (id,)).fetchone()
-        return cls.instance_from_db(row) if row else None
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
     
     def update(self):
         sql = """
