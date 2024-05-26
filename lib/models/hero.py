@@ -87,6 +87,10 @@ class Hero:
         Hero.all[hero.id] = hero
         return hero
     
+    @classmethod
+    def get_all(cls):
+        return cls.all
+    
     def update(self):
         sql = """
             UPDATE heroes

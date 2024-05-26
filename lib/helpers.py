@@ -1,7 +1,23 @@
 # lib/helpers.py
+from models.hero import Hero
+from models.villain import Villain
 
-def helper_1():
-    print("Performing useful function#1.")
+def list_heroes():
+    heroes = Hero.get_all()
+#    for hero in heroes:
+    print(heroes)
+
+def add_hero():
+    name = input("Enter hero name: ")
+    location = input("Enter hero location: ")
+    abilities = [input("Enter hero abilities, seperated by commas: ")]
+    try:
+        hero = Hero.create(name, location, abilities)
+        print(hero)
+    except Exception as exc:
+        print(f'Error creating hero: {exc}')
+        
+
 
 
 def exit_program():

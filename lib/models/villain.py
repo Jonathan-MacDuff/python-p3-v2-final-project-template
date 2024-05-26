@@ -87,6 +87,16 @@ class Villain:
         Villain.all[villain.id] = villain
         return villain
     
+    @classmethod
+    def get_all(cls):
+        sql = """
+            SELECT *
+            FROM villains
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
     def update(self):
         sql = """
             UPDATE villains

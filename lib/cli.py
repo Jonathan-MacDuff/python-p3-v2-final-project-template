@@ -2,7 +2,8 @@
 
 from helpers import (
     exit_program,
-    helper_1
+    list_heroes,
+    add_hero
 )
 
 
@@ -13,7 +14,9 @@ def main():
         if choice == "0":
             exit_program()
         elif choice == "1":
-            helper_1()
+            list_heroes()
+        elif choice == "2":
+            add_hero()
         else:
             print("Invalid choice")
 
@@ -21,7 +24,8 @@ def main():
 def menu():
     print("Please select an option:")
     print("0. Exit the program")
-    print("1. Some useful function")
+    print("1. List all heroes")
+    print("2. Create a hero")
 
 
 if __name__ == "__main__":
