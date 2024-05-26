@@ -2,8 +2,8 @@
 
 from helpers import (
     exit_program,
-    list_heroes,
-    add_hero
+    list_characters,
+    add_character
 )
 
 
@@ -14,9 +14,9 @@ def main():
         if choice == "0":
             exit_program()
         elif choice == "1":
-            list_heroes()
+            list_characters()
         elif choice == "2":
-            add_hero()
+            add_character()
         else:
             print("Invalid choice")
 

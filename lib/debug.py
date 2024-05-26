@@ -3,15 +3,15 @@
 
 from models.__init__ import CONN, CURSOR
 import ipdb
-from models.hero import Hero
+from models.character import Character
 
 def reset_database():
-    Hero.drop_table()
-    Hero.create_table()
+    Character.drop_table()
+    Character.create_table()
 
-    Hero.create("Deadpool", "Earth", ["Healing Factor", "Ninja Skills"])
-    Hero.create("Spider-Man", "Manhattan", ["Strength", "Webbing", "Agility"])
-    Hero.create("Daredevil", "Manhattan", ["Senses"])
+    Character.create("Deadpool", "Earth", ["Healing Factor", "Ninja Skills"])
+    Character.create("Spider-Man", "Manhattan", ["Strength", "Webbing", "Agility"])
+    Character.create("Daredevil", "Manhattan", ["Senses"])
 
 reset_database()
 ipdb.set_trace()

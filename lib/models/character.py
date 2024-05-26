@@ -1,9 +1,9 @@
-# lib/models/hero.py
+# lib/models/character.py
 import json
 from models.__init__ import CURSOR, CONN
 
 
-class Hero:
+class Character:
 
     all = {}
 
@@ -14,7 +14,7 @@ class Hero:
         self.abilities = abilities
 
     def __repr__(self):
-        return f'<Hero {self.id}: {self.name}, {self.location}, {self.abilities}>'
+        return f'<Character {self.id}: {self.name}, {self.location}, {self.abilities}>'
 
     @property
     def name(self):
@@ -55,7 +55,7 @@ class Hero:
     @classmethod
     def create_table(cls):
         sql = """
-            CREATE TABLE IF NOT EXISTS heroes (
+            CREATE TABLE IF NOT EXISTS characters (
             id INTEGER PRIMARY KEY,
             name TEXT,
             location TEXT,
@@ -68,52 +68,51 @@ class Hero:
     @classmethod
     def drop_table(cls):
         sql = """
-            DROP TABLE IF EXISTS heroes;
+            DROP TABLE IF EXISTS characters;
         """
         CURSOR.execute(sql)
         CONN.commit()
 
     @classmethod
     def create(cls, name, location, abilities):
-        hero = cls(name, location, abilities)
+        character = cls(name, location, abilities)
         abilities_str = json.dumps(abilities)
         sql = """
-            INSERT INTO heroes (name, location, abilities)
+            INSERT INTO characters (name, location, abilities)
             VALUES (?, ?, ?)
         """
         CURSOR.execute(sql, (name, location, abilities_str))
         CONN.commit()
-        hero.id = CURSOR.lastrowid
-        Hero.all[hero.id] = hero
-        return hero
+        character.id = CURSOR.lastrowid
+        cls.all[character.id] = character
+        return character
     
     @classmethod
     def instance_from_db(cls, row):
-        hero = cls.all.get(row[0])
+        character = cls.all.get(row[0])
         abilities = json.loads(row[3])
-        if hero:
-            hero.name = row[1]
-            hero.location = row[2]
-            hero.abilities = abilities
+        if character:
+            character.name = row[1]
+            character.location = row[2]
+            character.abilities = abilities
         else:
-            hero = cls(row[1], row[2], abilities)
-            hero.id = row[0]
-            cls.all[hero.id] = hero
-        return hero
+            character = cls(row[1], row[2], abilities, id=row[0])
+            cls.all[character.id] = character
+        return character
             
     
     @classmethod
     def get_all(cls):
         sql = """
             SELECT *
-            FROM heroes
+            FROM characters
         """
         rows = CURSOR.execute(sql).fetchall()
         return [cls.instance_from_db(row) for row in rows]
     
     def update(self):
         sql = """
-            UPDATE heroes
+            UPDATE characters
             SET name = ?, location = ?, abilities = ?
             WHERE id = ?
         """
@@ -123,10 +122,10 @@ class Hero:
 
     def delete(self):
         sql = """
-            DELETE FROM heroes
+            DELETE FROM characters
             WHERE id = ?
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        del Hero.all[self.id]
+        del Character.all[self.id]
         self.id = None
