@@ -18,6 +18,21 @@ def add_character():
         print(character)
     except Exception as exc:
         print(f'Error creating character: {exc}')
+
+def delete_character():
+    id_ = input("Enter character id: ")
+    if character := Character.find_by_id(id_):
+        character.delete()
+        print(f'Character {id_} deleted')
+    else:
+        print(f'Character {id_} not found')
+
+def find_character():
+    id_ = input("Enter character id: ")
+    if character := Character.find_by_id(id_):
+        print(character)
+    else:
+        print(f'Character {id_} not found')
         
 def exit_program():
     print("Goodbye!")

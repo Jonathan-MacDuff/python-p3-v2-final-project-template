@@ -100,6 +100,15 @@ class Character:
             cls.all[character.id] = character
         return character
             
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT *
+            FROM characters
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
     
     @classmethod
     def get_all(cls):

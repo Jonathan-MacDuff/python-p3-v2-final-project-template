@@ -5,7 +5,7 @@ class Battle():
 
     all = {}
 
-    def __init__(self, hero, villain, location):
-        self.hero = hero
-        self.villain = villain
+    def __init__(self, aggressor, defender, location):
+        self.aggressor = aggressor
+        self.defender = defender
         self.location = location
