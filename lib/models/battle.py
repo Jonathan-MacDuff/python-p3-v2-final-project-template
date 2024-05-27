@@ -1,6 +1,5 @@
 from models.__init__ import CURSOR, CONN
 from models.character import Character
-import json
 
 class Battle():
 
@@ -105,3 +104,32 @@ class Battle():
         """
         rows = CURSOR.execute(sql).fetchall()
         return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT *
+            FROM battles
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    # def update(self):
+    #     sql = """
+    #         UPDATE battles
+    #         SET aggressor_id = ?, defender_id = ?, location = ?, victor = ?
+    #         WHERE id = ?
+    #     """
+    #     CURSOR.execute(sql, (self.aggressor_id, self.defender_id, self.location, self.victor, self.id,))
+    #     CONN.commit()
+
+    def delete(self):
+        sql = """
+            DELETE FROM battles
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        del Battle.all[self.id]
+        self.id = None

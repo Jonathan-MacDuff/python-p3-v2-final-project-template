@@ -129,15 +129,15 @@ class Character:
         rows = CURSOR.execute(sql).fetchall()
         return [cls.instance_from_db(row) for row in rows]
     
-    def update(self):
-        sql = """
-            UPDATE characters
-            SET name = ?, location = ?, abilities = ?
-            WHERE id = ?
-        """
-        abilities_str = json.dumps(self.abilities)
-        CURSOR.execute(sql, (self.name, self.location, abilities_str, self.id,))
-        CONN.commit()
+    # def update(self):
+    #     sql = """
+    #         UPDATE characters
+    #         SET name = ?, location = ?, abilities = ?
+    #         WHERE id = ?
+    #     """
+    #     abilities_str = json.dumps(self.abilities)
+    #     CURSOR.execute(sql, (self.name, self.location, abilities_str, self.id,))
+    #     CONN.commit()
 
     def delete(self):
         sql = """
