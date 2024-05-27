@@ -1,5 +1,6 @@
 # lib/helpers.py
 from models.character import Character
+from models.battle import Battle
 
 def list_characters():
     characters = Character.get_all()
@@ -40,6 +41,14 @@ def find_character_by_name():
         print(character)
     else:
         print(f'Character {name} not found')
+
+def character_battle_count():
+    id_ = input("Enter character id: ")
+    if character := Character.find_by_id(id_):
+        battles = character.total_battles()
+        print(f'{character.name} has participated in {battles} battle(s)')
+    else:
+        print(f'Character {id_} not found')
         
 def exit_program():
     print("Goodbye!")

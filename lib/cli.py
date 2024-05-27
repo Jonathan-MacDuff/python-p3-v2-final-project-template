@@ -6,7 +6,8 @@ from helpers import (
     add_character,
     delete_character,
     find_character_by_id,
-    find_character_by_name
+    find_character_by_name,
+    character_battle_count
 )
 
 
@@ -26,6 +27,8 @@ def main():
             find_character_by_id()
         elif choice == "5":
             find_character_by_name()
+        elif choice == "6":
+            character_battle_count()
         else:
             print("Invalid choice")
 
@@ -38,6 +41,7 @@ def menu():
     print("3. Delete a character")
     print("4. Find a character by id")
     print("5. Find a character by name")
+    print("6. Find a character's total battles")
 
 
 if __name__ == "__main__":

@@ -6,10 +6,12 @@ class Battle():
 
     all = {}
 
-    def __init__(self, aggressor_id, defender_id, location):
+    def __init__(self, aggressor_id, defender_id, location, victor=None, id=None):
+        self.id = id
         self.aggressor_id = aggressor_id
         self.defender_id = defender_id
         self.location = location
+        self.victor = victor
 
     @property
     def aggressor_id(self):
@@ -81,3 +83,25 @@ class Battle():
         battle.id = CURSOR.lastrowid
         cls.all[battle.id] = battle
         return battle
+    
+    @classmethod
+    def instance_from_db(cls, row):
+        battle = cls.all.get(row[0])
+        if battle:
+            battle.aggressor_id = row[1]
+            battle.defender_id = row[2]
+            battle.location = row[3]
+            battle.victor = row[4]
+        else:
+            battle = cls(row[1], row[2], row[3], row[4], id=row[0])
+            cls.all[battle.id] = battle
+        return battle
+    
+    @classmethod
+    def get_all(cls):
+        sql = """
+            SELECT *
+            FROM battles
+        """
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
