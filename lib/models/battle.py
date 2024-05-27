@@ -12,6 +12,9 @@ class Battle():
         self.location = location
         self.victor = victor
 
+    def __repr__(self):
+        return f'<Battle {self.id}: Character {self.aggressor_id} attacked character {self.defender_id} in/on {self.location}. The victor was {self.victor}.'
+
     @property
     def aggressor_id(self):
         return self._aggressor_id
