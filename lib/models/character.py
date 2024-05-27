@@ -14,7 +14,7 @@ class Character:
         self.abilities = abilities
 
     def __repr__(self):
-        return f'<Character {self.id}: {self.name}, {self.location}, {self.abilities}>'
+        return f'<Character {self.id}: {self.name}, {self.location}. Abilities: {self.abilities}>'
 
     @property
     def name(self):

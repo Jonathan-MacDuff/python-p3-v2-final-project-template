@@ -82,6 +82,13 @@ def find_battle_by_id():
         print(battle)
     else:
         print(f'Battle {id_} not found')
+
+def all_victors():
+    if victors := Battle.all_battle_victors():
+        for victor in victors:
+            print(victor)
+    else:
+        print("No victors found")
         
 def exit_program():
     print("Goodbye!")

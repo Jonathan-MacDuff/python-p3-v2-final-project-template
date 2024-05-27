@@ -138,3 +138,11 @@ class Battle():
         CONN.commit()
         del Battle.all[self.id]
         self.id = None
+
+    @classmethod
+    def all_battle_victors(cls):
+        victors = []
+        for battle in cls.get_all():
+            if not victors.__contains__(battle.victor):
+                victors.append(battle.victor)
+        return victors
