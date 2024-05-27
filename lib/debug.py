@@ -16,6 +16,7 @@ def reset_database():
     Character.create("Spider-Man", "Manhattan", ["Strength", "Webbing", "Agility"])
     Character.create("Daredevil", "Manhattan", ["Senses"])
     Battle.create(1, 2, "Manhattan")
+    Battle.create(1, 3, "Manhattan")
 
 reset_database()
 ipdb.set_trace()

@@ -148,3 +148,14 @@ class Character:
         CONN.commit()
         del Character.all[self.id]
         self.id = None
+
+    @classmethod
+    def who_wins(cls, id_1, id_2):
+        aggressor = cls.find_by_id(id_1)
+        defender = cls.find_by_id(id_2)
+        if len(aggressor.abilities) == len(defender.abilities):
+            return "Draw"
+        elif len(aggressor.abilities) > len(defender.abilities):
+            return aggressor.name
+        else:
+            return defender.name

@@ -53,7 +53,8 @@ class Battle():
             id INTEGER PRIMARY KEY,
             aggressor_id INT,
             defender_id INT,
-            location TEXT
+            location TEXT,
+            victor TEXT
             )
         """
         CURSOR.execute(sql)
@@ -70,11 +71,12 @@ class Battle():
     @classmethod
     def create(cls, aggressor_id, defender_id, location):
         battle = cls(aggressor_id, defender_id, location)
+        victor = Character.who_wins(aggressor_id, defender_id)
         sql = """
-            INSERT INTO battles (aggressor_id, defender_id, location)
-            VALUES (?, ?, ?)
+            INSERT INTO battles (aggressor_id, defender_id, location, victor)
+            VALUES (?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (aggressor_id, defender_id, location))
+        CURSOR.execute(sql, (aggressor_id, defender_id, location, victor))
         CONN.commit()
         battle.id = CURSOR.lastrowid
         cls.all[battle.id] = battle
