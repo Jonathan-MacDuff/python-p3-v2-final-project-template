@@ -120,14 +120,14 @@ class Battle():
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
     
-    # def update(self):
-    #     sql = """
-    #         UPDATE battles
-    #         SET aggressor_id = ?, defender_id = ?, location = ?, victor = ?
-    #         WHERE id = ?
-    #     """
-    #     CURSOR.execute(sql, (self.aggressor_id, self.defender_id, self.location, self.victor, self.id,))
-    #     CONN.commit()
+    def update(self):
+        sql = """
+            UPDATE battles
+            SET aggressor_id = ?, defender_id = ?, location = ?, victor = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.aggressor_id, self.defender_id, self.location, self.victor, self.id,))
+        CONN.commit()
 
     def delete(self):
         sql = """

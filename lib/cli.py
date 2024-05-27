@@ -12,7 +12,9 @@ from helpers import (
     add_battle,
     delete_battle,
     find_battle_by_id,
-    all_victors
+    all_victors,
+    update_character,
+    update_battle
 )
 
 
@@ -44,6 +46,10 @@ def main():
             find_battle_by_id()
         elif choice == "11":
             all_victors()
+        elif choice == "12":
+            update_character()
+        elif choice == "13":
+            update_battle()
         else:
             print("Invalid choice")
 
@@ -61,7 +67,9 @@ def menu():
     print("8. Create a new battle")
     print("9. Delete a battle")
     print("10. Find a battle by id")
-    print("11: List all battle victors")
+    print("11. List all battle victors")
+    print("12. Update a character")
+    print("13. Update a battle")
 
 
 if __name__ == "__main__":

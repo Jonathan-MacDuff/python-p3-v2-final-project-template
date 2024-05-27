@@ -89,6 +89,44 @@ def all_victors():
             print(victor)
     else:
         print("No victors found")
+
+def update_character():
+    id_ = input("Enter the character's id: ")
+    if character := Character.find_by_id(id_):
+        print(character)
+        try:
+            name = input("Enter new character name: ")
+            location = input("Enter new character location: ")
+            abilities = [(input("Enter new character abilities, seperated by commas: "))]
+            character.name = name
+            character.location = location
+            character.abilities = abilities
+            character.update()
+            print(f'Success: {character}')
+        except Exception as exc:
+            print(f'Error updating character: {exc}')
+    else:
+        print(f'Character {id_} not found')
+
+def update_battle():
+    id_ = input("Enter the battle's id: ")
+    if battle := Battle.find_by_id(id_):
+        print(battle)
+        try:
+            aggressor_id = input("Enter new aggressor id: ")
+            defender_id = input("Enter new defender id: ")
+            location = input("Enter new battle location: ")
+            victor = input("Enter new battle victor: ")
+            battle.aggressor_id = aggressor_id
+            battle.defender_id = defender_id
+            battle.location = location
+            battle.victor = victor
+            battle.update()
+            print(f'Success: {battle}')
+        except Exception as exc:
+            print(f'Error updating battle: {exc}')
+    else:
+        print(f'Battle {id_} not found')
         
 def exit_program():
     print("Goodbye!")
