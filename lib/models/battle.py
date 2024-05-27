@@ -6,32 +6,34 @@ class Battle():
 
     all = {}
 
-    def __init__(self, aggressor, defender, location):
-        self.aggressor = aggressor
-        self.defender = defender
+    def __init__(self, aggressor_id, defender_id, location):
+        self.aggressor_id = aggressor_id
+        self.defender_id = defender_id
         self.location = location
 
     @property
-    def aggressor(self):
-        return self._aggressor
+    def aggressor_id(self):
+        return self._aggressor_id
     
-    @aggressor.setter
-    def aggressor(self, aggressor):
-        if isinstance(aggressor, Character):
-            self._aggressor = aggressor
+    @aggressor_id.setter
+    def aggressor_id(self, aggressor_id):
+        character = Character.find_by_id(aggressor_id)
+        if isinstance(character, Character):
+            self._aggressor_id = aggressor_id
         else:
-            raise ValueError("Aggressor must be an instance of the Character class")
+            raise ValueError("Aggressor_id must reference an instance of the Character class")
         
     @property
-    def defender(self):
-        return self._defender
+    def defender_id(self):
+        return self._defender_id
     
-    @defender.setter
-    def defender(self, defender):
-        if isinstance(defender, Character):
-            self._defender = defender
+    @defender_id.setter
+    def defender_id(self, defender_id):
+        character = Character.find_by_id(defender_id)
+        if isinstance(character, Character):
+            self._defender_id = defender_id
         else:
-            raise ValueError("Defender must be an instance of the Character class")
+            raise ValueError("Defender_id must reference an instance of the Character class")
         
     @property
     def location(self):
@@ -49,8 +51,8 @@ class Battle():
         sql = """
             CREATE TABLE IF NOT EXISTS battles (
             id INTEGER PRIMARY KEY,
-            aggressor TEXT,
-            defender TEXT,
+            aggressor_id INT,
+            defender_id INT,
             location TEXT
             )
         """
@@ -66,13 +68,13 @@ class Battle():
         CONN.commit()
 
     @classmethod
-    def create(cls, aggressor, defender, location):
-        battle = cls(aggressor, defender, location)
+    def create(cls, aggressor_id, defender_id, location):
+        battle = cls(aggressor_id, defender_id, location)
         sql = """
-            INSERT INTO battles (aggressor, defender, location)
+            INSERT INTO battles (aggressor_id, defender_id, location)
             VALUES (?, ?, ?)
         """
-        CURSOR.execute(sql, (aggressor, defender, location))
+        CURSOR.execute(sql, (aggressor_id, defender_id, location))
         CONN.commit()
         battle.id = CURSOR.lastrowid
         cls.all[battle.id] = battle
