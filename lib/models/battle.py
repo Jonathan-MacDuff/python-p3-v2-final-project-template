@@ -43,3 +43,37 @@ class Battle():
             self._location = location
         else:
             raise ValueError("Location must be a string")
+        
+    @classmethod
+    def create_table(cls):
+        sql = """
+            CREATE TABLE IF NOT EXISTS battles (
+            id INTEGER PRIMARY KEY,
+            aggressor TEXT,
+            defender TEXT,
+            location TEXT
+            )
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        sql = """
+            DROP TABLE IF EXISTS battles;
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def create(cls, aggressor, defender, location):
+        battle = cls(aggressor, defender, location)
+        sql = """
+            INSERT INTO battles (aggressor, defender, location)
+            VALUES (?, ?, ?)
+        """
+        CURSOR.execute(sql, (aggressor, defender, location))
+        CONN.commit()
+        battle.id = CURSOR.lastrowid
+        cls.all[battle.id] = battle
+        return battle
