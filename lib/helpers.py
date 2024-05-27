@@ -27,12 +27,19 @@ def delete_character():
     else:
         print(f'Character {id_} not found')
 
-def find_character():
+def find_character_by_id():
     id_ = input("Enter character id: ")
     if character := Character.find_by_id(id_):
         print(character)
     else:
         print(f'Character {id_} not found')
+
+def find_character_by_name():
+    name = input("Enter character name: ")
+    if character := Character.find_by_name(name):
+        print(character)
+    else:
+        print(f'Character {name} not found')
         
 def exit_program():
     print("Goodbye!")
