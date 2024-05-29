@@ -1,5 +1,5 @@
 # lib/models/character.py
-import json
+# import json
 from models.__init__ import CURSOR, CONN
 
 
@@ -14,7 +14,7 @@ class Character:
         self.abilities = abilities
 
     def __repr__(self):
-        return f'<Character {self.id}: {self.name}, {self.location}. Abilities: {self.abilities}>'
+        return f'<Character {self.id}: {self.name}, {self.location}. Abilities: {", ".join(self.abilities)}>'
 
     @property
     def name(self):
@@ -76,7 +76,8 @@ class Character:
     @classmethod
     def create(cls, name, location, abilities):
         character = cls(name, location, abilities)
-        abilities_str = json.dumps(abilities)
+        # abilities_str = json.dumps(abilities)
+        abilities_str = str(", ".join(abilities))
         sql = """
             INSERT INTO characters (name, location, abilities)
             VALUES (?, ?, ?)
@@ -90,7 +91,8 @@ class Character:
     @classmethod
     def instance_from_db(cls, row):
         character = cls.all.get(row[0])
-        abilities = json.loads(row[3])
+        # abilities = json.loads(row[3])
+        abilities = row[3].split(", ")
         if character:
             character.name = row[1]
             character.location = row[2]
