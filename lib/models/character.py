@@ -137,7 +137,7 @@ class Character:
             SET name = ?, location = ?, abilities = ?
             WHERE id = ?
         """
-        abilities_str = json.dumps(self.abilities)
+        abilities_str = str(", ".join(self.abilities))
         CURSOR.execute(sql, (self.name, self.location, abilities_str, self.id,))
         CONN.commit()
 
