@@ -87,11 +87,15 @@ def find_battle_by_id():
         print(f'Battle {id_} not found')
 
 def all_victors():
-    if victors := Battle.all_battle_victors():
-        for victor in victors:
-            print(victor)
-    else:
-        print("No victors found")
+        victors = []
+        for battle in Battle.get_all():
+            if not victors.__contains__(battle.victor):
+                victors.append(battle.victor)
+        if victors:
+            for victor in victors:
+                print(victor)
+        else:
+            print("No victors found")
 
 def update_character():
     id_ = input("Enter the character's id: ")
