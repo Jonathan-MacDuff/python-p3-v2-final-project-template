@@ -7,14 +7,14 @@ class Character:
 
     all = {}
 
-    def __init__(self, name, location, abilities=[], id=None):
+    def __init__(self, name, location, abilities="", id=None):
         self.id = id
         self.name = name
         self.location = location
         self.abilities = abilities
 
-    def __repr__(self):
-        return f'<Character {self.id}: {self.name}, {self.location}. Abilities: {", ".join(self.abilities)}>'
+    # def __repr__(self):
+    #     return f'<Character {self.id}: {self.name}, {self.location}. Abilities: {", ".join(self.abilities)}>'
 
     @property
     def name(self):
@@ -44,13 +44,10 @@ class Character:
 
     @abilities.setter
     def abilities(self, abilities):
-        if isinstance(abilities, list):
-            for ability in abilities:
-                if not isinstance(ability, str):
-                    raise ValueError("Each ability must be a string")
+        if isinstance(abilities, str):
             self._abilities = abilities
         else:
-            raise ValueError("Abilities must be a list of strings")
+            raise ValueError("Abilities must be a string")
         
     @classmethod
     def create_table(cls):
@@ -77,12 +74,12 @@ class Character:
     def create(cls, name, location, abilities):
         character = cls(name, location, abilities)
         # abilities_str = json.dumps(abilities)
-        abilities_str = str(", ".join(abilities))
+        # abilities_str = str(", ".join(abilities))
         sql = """
             INSERT INTO characters (name, location, abilities)
             VALUES (?, ?, ?)
         """
-        CURSOR.execute(sql, (name, location, abilities_str))
+        CURSOR.execute(sql, (name, location, abilities))
         CONN.commit()
         character.id = CURSOR.lastrowid
         cls.all[character.id] = character
@@ -92,13 +89,13 @@ class Character:
     def instance_from_db(cls, row):
         character = cls.all.get(row[0])
         # abilities = json.loads(row[3])
-        abilities = row[3].split(", ")
+        # abilities = row[3].split(", ")
         if character:
             character.name = row[1]
             character.location = row[2]
-            character.abilities = abilities
+            character.abilities = row[3]
         else:
-            character = cls(row[1], row[2], abilities, id=row[0])
+            character = cls(row[1], row[2], row[3], id=row[0])
             cls.all[character.id] = character
         return character
             
@@ -137,8 +134,8 @@ class Character:
             SET name = ?, location = ?, abilities = ?
             WHERE id = ?
         """
-        abilities_str = str(", ".join(self.abilities))
-        CURSOR.execute(sql, (self.name, self.location, abilities_str, self.id,))
+        # abilities_str = str(", ".join(self.abilities))
+        CURSOR.execute(sql, (self.name, self.location, self.abilities, self.id,))
         CONN.commit()
 
     def delete(self):
@@ -155,9 +152,9 @@ class Character:
     def who_wins(cls, id_1, id_2):
         aggressor = cls.find_by_id(id_1)
         defender = cls.find_by_id(id_2)
-        if len(aggressor.abilities) == len(defender.abilities):
+        if len(aggressor.abilities.split(', ')) == len(defender.abilities.split(', ')):
             return "Draw"
-        elif len(aggressor.abilities) > len(defender.abilities):
+        elif len(aggressor.abilities.split(', ')) > len(defender.abilities.split(', ')):
             return aggressor.name
         else:
             return defender.name
