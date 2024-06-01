@@ -43,12 +43,15 @@ def find_character_by_name():
         print(f'Character {name} not found')
 
 def character_battle_count():
-    id_ = input("Enter character id: ")
-    if character := Character.find_by_id(id_):
-        battles = character.total_battles()
-        print(f'{character.name} has participated in {battles} battle(s)')
+    name = input("Enter character name: ")
+    if character := Character.find_by_name(name):
+        battles = 0
+        for battle in Battle.get_all():
+            if battle.aggressor_id == character.id or battle.defender_id == character.id:
+                battles += 1
+        print(f'{name} has participated in {battles} battle(s)')
     else:
-        print(f'Character {id_} not found')
+        print(f'{name} not found')
 
 def list_battles():
     battles = Battle.get_all()

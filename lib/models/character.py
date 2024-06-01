@@ -159,10 +159,10 @@ class Character:
         else:
             return defender.name
         
-    def total_battles(self):
-        from models.battle import Battle
-        battle_count = 0
-        for battle in Battle.get_all():
-            if battle.aggressor_id == self.id or battle.defender_id == self.id:
-                battle_count += 1
-        return battle_count
+    # def total_battles(self):
+    #     from models.battle import Battle
+    #     battle_count = 0
+    #     for battle in Battle.get_all():
+    #         if battle.aggressor_id == self.id or battle.defender_id == self.id:
+    #             battle_count += 1
+    #     return battle_count
