@@ -1,5 +1,4 @@
 # lib/models/character.py
-# import json
 from models.__init__ import CURSOR, CONN
 
 
@@ -12,9 +11,6 @@ class Character:
         self.name = name
         self.location = location
         self.abilities = abilities
-
-    # def __repr__(self):
-    #     return f'<Character {self.id}: {self.name}, {self.location}. Abilities: {", ".join(self.abilities)}>'
 
     @property
     def name(self):
@@ -73,8 +69,6 @@ class Character:
     @classmethod
     def create(cls, name, location, abilities):
         character = cls(name, location, abilities)
-        # abilities_str = json.dumps(abilities)
-        # abilities_str = str(", ".join(abilities))
         sql = """
             INSERT INTO characters (name, location, abilities)
             VALUES (?, ?, ?)
@@ -88,8 +82,6 @@ class Character:
     @classmethod
     def instance_from_db(cls, row):
         character = cls.all.get(row[0])
-        # abilities = json.loads(row[3])
-        # abilities = row[3].split(", ")
         if character:
             character.name = row[1]
             character.location = row[2]
@@ -134,7 +126,6 @@ class Character:
             SET name = ?, location = ?, abilities = ?
             WHERE id = ?
         """
-        # abilities_str = str(", ".join(self.abilities))
         CURSOR.execute(sql, (self.name, self.location, self.abilities, self.id,))
         CONN.commit()
 
@@ -147,22 +138,3 @@ class Character:
         CONN.commit()
         del Character.all[self.id]
         self.id = None
-
-    @classmethod
-    def who_wins(cls, id_1, id_2):
-        aggressor = cls.find_by_id(id_1)
-        defender = cls.find_by_id(id_2)
-        if len(aggressor.abilities.split(', ')) == len(defender.abilities.split(', ')):
-            return "Draw"
-        elif len(aggressor.abilities.split(', ')) > len(defender.abilities.split(', ')):
-            return aggressor.name
-        else:
-            return defender.name
-        
-    # def total_battles(self):
-    #     from models.battle import Battle
-    #     battle_count = 0
-    #     for battle in Battle.get_all():
-    #         if battle.aggressor_id == self.id or battle.defender_id == self.id:
-    #             battle_count += 1
-    #     return battle_count

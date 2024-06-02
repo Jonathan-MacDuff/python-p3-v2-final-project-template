@@ -5,17 +5,11 @@ class Battle():
 
     all = {}
 
-    def __init__(self, aggressor_id, defender_id, location, victor=None, id=None):
+    def __init__(self, aggressor_id, defender_id, location, id=None):
         self.id = id
         self.aggressor_id = aggressor_id
         self.defender_id = defender_id
         self.location = location
-        self.victor = victor
-        # self.aggressor = Character.find_by_id(aggressor_id)
-        # self.defender = Character.find_by_id(defender_id)
-
-    # def __repr__(self):
-    #     return f'<Battle {self.id}: {self.aggressor.name} attacked {self.defender.name} in/on {self.location}. {self.victor} was the victor.'
 
     @property
     def aggressor_id(self):
@@ -27,7 +21,7 @@ class Battle():
         if isinstance(character, Character):
             self._aggressor_id = aggressor_id
         else:
-            raise ValueError("Aggressor_id must reference an instance of the Character class")
+            raise ValueError("Aggressor must be an existing Character")
         
     @property
     def defender_id(self):
@@ -39,7 +33,7 @@ class Battle():
         if isinstance(character, Character):
             self._defender_id = defender_id
         else:
-            raise ValueError("Defender_id must reference an instance of the Character class")
+            raise ValueError("Defender must be an existing Character")
         
     @property
     def location(self):
@@ -77,12 +71,11 @@ class Battle():
     @classmethod
     def create(cls, aggressor_id, defender_id, location):
         battle = cls(aggressor_id, defender_id, location)
-        victor = Character.who_wins(aggressor_id, defender_id)
         sql = """
-            INSERT INTO battles (aggressor_id, defender_id, location, victor)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO battles (aggressor_id, defender_id, location)
+            VALUES (?, ?, ?)
         """
-        CURSOR.execute(sql, (aggressor_id, defender_id, location, victor))
+        CURSOR.execute(sql, (aggressor_id, defender_id, location))
         CONN.commit()
         battle.id = CURSOR.lastrowid
         cls.all[battle.id] = battle
@@ -95,9 +88,8 @@ class Battle():
             battle.aggressor_id = row[1]
             battle.defender_id = row[2]
             battle.location = row[3]
-            battle.victor = row[4]
         else:
-            battle = cls(row[1], row[2], row[3], row[4], id=row[0])
+            battle = cls(row[1], row[2], row[3], id=row[0])
             cls.all[battle.id] = battle
         return battle
     
@@ -123,10 +115,10 @@ class Battle():
     def update(self):
         sql = """
             UPDATE battles
-            SET aggressor_id = ?, defender_id = ?, location = ?, victor = ?
+            SET aggressor_id = ?, defender_id = ?, location = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.aggressor_id, self.defender_id, self.location, self.victor, self.id,))
+        CURSOR.execute(sql, (self.aggressor_id, self.defender_id, self.location, self.id,))
         CONN.commit()
 
     def delete(self):
@@ -138,11 +130,3 @@ class Battle():
         CONN.commit()
         del Battle.all[self.id]
         self.id = None
-
-    # @classmethod
-    # def all_battle_victors(cls):
-    #     victors = []
-    #     for battle in cls.get_all():
-    #         if not victors.__contains__(battle.victor):
-    #             victors.append(battle.victor)
-    #     return victors
