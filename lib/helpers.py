@@ -27,8 +27,8 @@ def print_battle(battle):
 def list_characters():
     characters = Character.get_all()
     if characters:
-        for character in characters:
-            print_character(character)
+        for i, character in enumerate(characters, start = 1):
+            print(f'{i}.', character.name)
     else:
         print("No characters found")
 
