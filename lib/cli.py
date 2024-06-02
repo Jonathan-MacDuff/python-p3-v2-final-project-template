@@ -66,7 +66,7 @@ def menu():
     print("7. List all battles")
     print("8. Create a new battle")
     print("9. Delete a battle")
-    print("10. Find a battle by id")
+    print("10. Find a battle by number")
     print("11. List all battle victors")
     print("12. Update a character")
     print("13. Update a battle")

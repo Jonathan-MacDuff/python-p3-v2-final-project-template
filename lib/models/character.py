@@ -7,7 +7,7 @@ class Character:
 
     all = {}
 
-    def __init__(self, name, location, abilities="", id=None):
+    def __init__(self, name, location, abilities, id=None):
         self.id = id
         self.name = name
         self.location = location

@@ -12,9 +12,9 @@ def reset_database():
     Battle.drop_table()
     Battle.create_table()
 
-    Character.create("Deadpool", "Earth", ["Healing Factor", "Ninja Skills"])
-    Character.create("Spider-Man", "Manhattan", ["Strength", "Webbing", "Agility"])
-    Character.create("Daredevil", "Manhattan", ["Senses"])
+    Character.create("Deadpool", "Earth", "Healing Factor, Ninja Skills")
+    Character.create("Spider-Man", "Manhattan", "Strength, Webbing, Agility")
+    Character.create("Daredevil", "Manhattan", "Senses")
     Battle.create(1, 2, "Manhattan")
     Battle.create(1, 3, "Manhattan")
 
