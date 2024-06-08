@@ -24,13 +24,22 @@ def print_character(character):
 def print_battle(battle):
     print(f'Battle number {battle.id}: {name_from_id(battle.aggressor_id)} attacked {name_from_id(battle.defender_id)} in/on {battle.location}. {find_victor(battle.aggressor_id, battle.defender_id)} was the victor.')
 
-def list_characters():
+def character_choice():
     characters = Character.get_all()
     if characters:
         for i, character in enumerate(characters, start = 1):
             print(f'{i}.', character.name)
+        choice = input("Select a character: ")
+        chosen = characters[int(choice) - 1]
+        return chosen
     else:
         print("No characters found")
+
+def display_character(character):
+        print(character.name)
+        print(f'Location: {character.location}')
+        print(f'Abilities: {character.abilities}')
+        print(f'Total battles: {character_battle_count(character)}')
 
 def add_character():
     name = input("Enter character name: ")
@@ -65,16 +74,12 @@ def find_character_by_name():
     else:
         print(f'{name} not found')
 
-def character_battle_count():
-    name = input("Enter character name: ")
-    if character := Character.find_by_name(name):
-        battles = 0
-        for battle in Battle.get_all():
-            if battle.aggressor_id == character.id or battle.defender_id == character.id:
-                battles += 1
-        print(f'{name} has participated in {battles} battle(s)')
-    else:
-        print(f'{name} not found')
+def character_battle_count(character):
+    battles = 0
+    for battle in Battle.get_all():
+        if battle.aggressor_id == character.id or battle.defender_id == character.id:
+            battles += 1
+    return battles
 
 def list_battles():
     battles = Battle.get_all()

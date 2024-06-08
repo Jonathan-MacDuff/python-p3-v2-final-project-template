@@ -2,7 +2,7 @@
 
 from helpers import (
     exit_program,
-    list_characters,
+    character_choice,
     add_character,
     delete_character,
     find_character_by_id,
@@ -14,7 +14,8 @@ from helpers import (
     find_battle_by_id,
     all_victors,
     update_character,
-    update_battle
+    update_battle,
+    display_character
 )
 
 
@@ -37,21 +38,10 @@ def main_menu():
     print("0. Exit the program")
     print("1. Character menu")
     print("2. Battle menu")
-    print("3. Delete a character")
-    print("4. Find a character by id")
-    print("5. Find a character by name")
-    print("6. Find a character's total battles")
-    print("7. List all battles")
-    print("8. Create a new battle")
-    print("9. Delete a battle")
-    print("10. Find a battle by number")
-    print("11. List all battle victors")
-    print("12. Update a character")
-    print("13. Update a battle")
 
 def character_menu():
     while True:
-        print("Please select and option:")
+        print("Please select an option:")
         print("0. Return to main menu")
         print("1. View all characters")
         print("2. Create a new character")
@@ -61,7 +51,8 @@ def character_menu():
         if choice == "0":
             main_menu()
         elif choice == "1":
-            character_selection()
+            chosen = character_choice()
+            single_character_menu(chosen)
         elif choice == "2":
             add_character()
         elif choice == "3":
@@ -73,7 +64,7 @@ def character_menu():
 
 def battle_menu():
     while True:
-        print("Please select and option:")
+        print("Please select an option:")
         print("0. Return to main menu")
         print("1. View all battles")
         print("2. Create a new battle")
@@ -93,12 +84,34 @@ def battle_menu():
         else:
             print("Invalid selection")
 
+def single_character_menu(chosen):
+    while True:
+        print(f'Please select an option for {chosen.name}: ')
+        print("0. Return to character menu")
+        print("1. View character details")
+        print("2. Update character")
+        print("3. Delete character")
+        choice = input("> ")
+        if choice == "0":
+            character_menu()
+        elif choice == "1":
+            display_character(chosen)
+        elif choice == "2":
+            None
+        elif choice == "3":
+            None
+        else:
+            print("Invalid selection")
+
 def character_selection():
     while True:
-        list_characters()
+        character_choice()
+        print("Please select an option: ")
         choice = input ("> ")
         if choice == "0":
             character_menu()
+        else:
+            print("Invalid selection")
 
 
 if __name__ == "__main__":
