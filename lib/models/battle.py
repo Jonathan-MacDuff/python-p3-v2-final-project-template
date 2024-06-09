@@ -3,8 +3,6 @@ from models.character import Character
 
 class Battle():
 
-    all = {}
-
     def __init__(self, aggressor_id, defender_id, location, id=None):
         self.id = id
         self.aggressor_id = aggressor_id
@@ -69,28 +67,18 @@ class Battle():
 
     @classmethod
     def create(cls, aggressor_id, defender_id, location):
-        battle = cls(aggressor_id, defender_id, location)
         sql = """
             INSERT INTO battles (aggressor_id, defender_id, location)
             VALUES (?, ?, ?)
         """
         CURSOR.execute(sql, (aggressor_id, defender_id, location))
         CONN.commit()
-        battle.id = CURSOR.lastrowid
-        cls.all[battle.id] = battle
-        return battle
+        id = CURSOR.lastrowid
+        return cls.find_by_id(id)
     
     @classmethod
     def instance_from_db(cls, row):
-        battle = cls.all.get(row[0])
-        if battle:
-            battle.aggressor_id = row[1]
-            battle.defender_id = row[2]
-            battle.location = row[3]
-        else:
-            battle = cls(row[1], row[2], row[3], id=row[0])
-            cls.all[battle.id] = battle
-        return battle
+        return cls(row[1], row[2], row[3], id=row[0])
     
     @classmethod
     def get_all(cls):
@@ -127,5 +115,4 @@ class Battle():
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        del Battle.all[self.id]
         self.id = None

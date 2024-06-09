@@ -73,7 +73,7 @@ def update_character(character):
         print(f'Error updating character: {exc}')
 
 def delete_character(character):
-    confirm = input("This will also delete all of this character's battles. Please type \"delete\" to confirm: ")
+    confirm = input("This will also delete all battles involving this character. Please enter \"delete\" to confirm: ")
     if confirm.lower() == "delete":
         character_battles = all_character_battles(character)
         for battle in character_battles:

@@ -4,8 +4,6 @@ from models.__init__ import CURSOR, CONN
 
 class Character:
 
-    all = {}
-
     def __init__(self, name, location, abilities, id=None):
         self.id = id
         self.name = name
@@ -68,28 +66,18 @@ class Character:
 
     @classmethod
     def create(cls, name, location, abilities):
-        character = cls(name, location, abilities)
         sql = """
             INSERT INTO characters (name, location, abilities)
             VALUES (?, ?, ?)
         """
         CURSOR.execute(sql, (name, location, abilities))
         CONN.commit()
-        character.id = CURSOR.lastrowid
-        cls.all[character.id] = character
-        return character
+        id = CURSOR.lastrowid
+        return cls.find_by_id(id)
     
     @classmethod
     def instance_from_db(cls, row):
-        character = cls.all.get(row[0])
-        if character:
-            character.name = row[1]
-            character.location = row[2]
-            character.abilities = row[3]
-        else:
-            character = cls(row[1], row[2], row[3], id=row[0])
-            cls.all[character.id] = character
-        return character
+        return cls(row[1], row[2], row[3], id=row[0])
             
     @classmethod
     def find_by_id(cls, id):
@@ -105,6 +93,7 @@ class Character:
     def find_by_name(cls, name):
         sql = """
             SELECT *
+
             FROM characters
             WHERE name = ?
         """
@@ -136,5 +125,4 @@ class Character:
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        del Character.all[self.id]
         self.id = None
