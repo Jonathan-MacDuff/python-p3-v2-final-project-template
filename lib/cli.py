@@ -11,7 +11,8 @@ from helpers import (
     all_victors,
     update_character,
     update_battle,
-    display_character
+    display_character,
+    location_battles
 )
 
 
@@ -41,20 +42,17 @@ def character_menu():
         print("0. Return to main menu")
         print("1. View all characters")
         print("2. Create a new character")
-        print("3. Delete a character")
-        print("4. Update a character")
         choice = input("> ")
         if choice == "0":
-            main_menu()
+            main()
         elif choice == "1":
             chosen = character_choice()
-            single_character_menu(chosen)
+            if chosen: 
+                single_character_menu(chosen)
+            else:
+                print("No valid character selected")
         elif choice == "2":
             add_character()
-        elif choice == "3":
-            delete_character()
-        elif choice == "4":
-            update_character()
         else:
             print("Invalid selection")
 
@@ -67,9 +65,10 @@ def battle_menu():
         print("3. Create a new battle")
         print("4. Delete a battle")
         print("5. Update a battle")
+        print("6. Find battles by location")
         choice = input("> ")
         if choice == "0":
-            main_menu()
+            main()
         elif choice == "1":
             list_battles()
         elif choice == "2":
@@ -80,6 +79,8 @@ def battle_menu():
             delete_battle()
         elif choice == "5":
             update_battle()
+        elif choice == "6":
+            location_battles()
         else:
             print("Invalid selection")
 

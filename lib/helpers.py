@@ -18,12 +18,15 @@ def find_victor(id_1, id_2):
     else:
         return "Draw"
     
+def all_character_battles(character):
+        battles = []
+        for battle in Battle.get_all():
+            if battle.aggressor_id == character.id or battle.defender_id == character.id:
+                battles.append(battle)
+        return battles
+    
 def character_battle_count(character):
-    battles = 0
-    for battle in Battle.get_all():
-        if battle.aggressor_id == character.id or battle.defender_id == character.id:
-            battles += 1
-    return battles
+    return len(all_character_battles(character))
     
 def print_character(character):
     print(f'{character.name} lives in/on {character.location}. Their abilities include: {character.abilities}.')
@@ -37,20 +40,17 @@ def character_choice():
         for i, character in enumerate(characters, start = 1):
             print(f'{i}.', character.name)
         choice = input("Select a character: ")
-        if isinstance(choice, int):
+        try:
             chosen = characters[int(choice) - 1]
-            if chosen:
-                return chosen
-            else:
-                print("Invalid selection")
-        elif isinstance(choice, str):
+            return chosen
+        except:
             chosen = Character.find_by_name(choice)
             if chosen:
                 return chosen
             else:
-                return("Invalid selection")
+                return None
     else:
-        print("No characters found")
+        return None
 
 def display_character(character):
         print(character.name)
@@ -73,7 +73,15 @@ def update_character(character):
         print(f'Error updating character: {exc}')
 
 def delete_character(character):
-    character.delete()
+    confirm = input("This will also delete all of this character's battles. Please type \"delete\" to confirm: ")
+    if confirm.lower() == "delete":
+        character_battles = all_character_battles(character)
+        for battle in character_battles:
+            battle.delete()
+        character.delete()
+        print(f'Success: {character.name} deleted')
+    else:
+        print("Deletion canceled")
 
 def add_character():
     name = input("Enter character name: ")
@@ -144,6 +152,19 @@ def update_battle():
             print(f'Error updating battle: {exc}')
     else:
         print(f'Battle number {n} not found')
+
+def location_battles():
+    location = input("Enter location: ")
+    battles = Battle.get_all()
+    battle_list = []
+    for battle in battles:
+        if battle.location == location:
+            battle_list.append(battle)
+    if battle_list:
+        for battle in battle_list:
+            print_battle(battle)
+    else:
+        print("No battles found")
         
 def exit_program():
     print("Goodbye!")

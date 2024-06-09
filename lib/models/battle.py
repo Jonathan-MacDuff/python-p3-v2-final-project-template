@@ -53,8 +53,7 @@ class Battle():
             id INTEGER PRIMARY KEY,
             aggressor_id INT,
             defender_id INT,
-            location TEXT,
-            victor TEXT
+            location TEXT
             )
         """
         CURSOR.execute(sql)
