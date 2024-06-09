@@ -5,13 +5,9 @@ from helpers import (
     character_choice,
     add_character,
     delete_character,
-    find_character_by_id,
-    find_character_by_name,
-    character_battle_count,
     list_battles,
     add_battle,
     delete_battle,
-    find_battle_by_id,
     all_victors,
     update_character,
     update_battle,
@@ -67,19 +63,22 @@ def battle_menu():
         print("Please select an option:")
         print("0. Return to main menu")
         print("1. View all battles")
-        print("2. Create a new battle")
-        print("3. Delete a battle")
-        print("4. Update a battle")
+        print("2. View all battle victors")
+        print("3. Create a new battle")
+        print("4. Delete a battle")
+        print("5. Update a battle")
         choice = input("> ")
         if choice == "0":
             main_menu()
         elif choice == "1":
             list_battles()
         elif choice == "2":
-            add_battle()
+            all_victors()
         elif choice == "3":
-            delete_battle()
+            add_battle()
         elif choice == "4":
+            delete_battle()
+        elif choice == "5":
             update_battle()
         else:
             print("Invalid selection")
@@ -97,18 +96,9 @@ def single_character_menu(chosen):
         elif choice == "1":
             display_character(chosen)
         elif choice == "2":
-            None
+            update_character(chosen)
         elif choice == "3":
-            None
-        else:
-            print("Invalid selection")
-
-def character_selection():
-    while True:
-        character_choice()
-        print("Please select an option: ")
-        choice = input ("> ")
-        if choice == "0":
+            delete_character(chosen)
             character_menu()
         else:
             print("Invalid selection")

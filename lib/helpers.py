@@ -18,6 +18,13 @@ def find_victor(id_1, id_2):
     else:
         return "Draw"
     
+def character_battle_count(character):
+    battles = 0
+    for battle in Battle.get_all():
+        if battle.aggressor_id == character.id or battle.defender_id == character.id:
+            battles += 1
+    return battles
+    
 def print_character(character):
     print(f'{character.name} lives in/on {character.location}. Their abilities include: {character.abilities}.')
 
@@ -30,8 +37,18 @@ def character_choice():
         for i, character in enumerate(characters, start = 1):
             print(f'{i}.', character.name)
         choice = input("Select a character: ")
-        chosen = characters[int(choice) - 1]
-        return chosen
+        if isinstance(choice, int):
+            chosen = characters[int(choice) - 1]
+            if chosen:
+                return chosen
+            else:
+                print("Invalid selection")
+        elif isinstance(choice, str):
+            chosen = Character.find_by_name(choice)
+            if chosen:
+                return chosen
+            else:
+                return("Invalid selection")
     else:
         print("No characters found")
 
@@ -40,6 +57,23 @@ def display_character(character):
         print(f'Location: {character.location}')
         print(f'Abilities: {character.abilities}')
         print(f'Total battles: {character_battle_count(character)}')
+
+def update_character(character):
+    try:
+        name = input("Enter new character name: ")
+        location = input("Enter new character location: ")
+        abilities = (input("Enter new character abilities, seperated by commas: "))
+        character.name = name
+        character.location = location
+        character.abilities = abilities
+        character.update()
+        print('Success:')
+        print_character(character)
+    except Exception as exc:
+        print(f'Error updating character: {exc}')
+
+def delete_character(character):
+    character.delete()
 
 def add_character():
     name = input("Enter character name: ")
@@ -52,35 +86,6 @@ def add_character():
     except Exception as exc:
         print(f'Error creating character: {exc}')
 
-def delete_character():
-    name = input("Enter character name: ")
-    if character := Character.find_by_name(name):
-        character.delete()
-        print(f'{name} deleted')
-    else:
-        print(f'{name} not found')
-
-def find_character_by_id():
-    id_ = input("Enter character id: ")
-    if character := Character.find_by_id(id_):
-        print_character(character)
-    else:
-        print(f'Character not found')
-
-def find_character_by_name():
-    name = input("Enter character name: ")
-    if character := Character.find_by_name(name):
-        print_character(character)
-    else:
-        print(f'{name} not found')
-
-def character_battle_count(character):
-    battles = 0
-    for battle in Battle.get_all():
-        if battle.aggressor_id == character.id or battle.defender_id == character.id:
-            battles += 1
-    return battles
-
 def list_battles():
     battles = Battle.get_all()
     if battles:
@@ -88,31 +93,6 @@ def list_battles():
             print_battle(battle)
     else:
         print("No battles found")
-
-def add_battle():
-    aggressor = input("Enter aggressor name: ")
-    defender = input("Enter defender name: ")
-    location = input("Enter battle location: ")
-    try:
-        battle = Battle.create(id_from_name(aggressor), id_from_name(defender), location)
-        print_battle(battle)
-    except Exception as exc:
-        print(f'Error creating battle: {exc}')
-
-def delete_battle():
-    n = input("Enter the battle number: ")
-    if battle := Battle.find_by_id(n):
-        battle.delete()
-        print(f'Battle number {n} deleted')
-    else:
-        print(f'Battle number {n} not found')
-
-def find_battle_by_id():
-    n = input("Enter the battle number: ")
-    if battle := Battle.find_by_id(n):
-        print_battle(battle)
-    else:
-        print(f'Battle number {n} not found')
 
 def all_victors():
         victors = []
@@ -126,27 +106,28 @@ def all_victors():
         else:
             print("No victors found")
 
-def update_character():
-    name = input("Enter the character's name: ")
-    if character := Character.find_by_name(name):
-        print_character(character)
-        try:
-            name = input("Enter new character name: ")
-            location = input("Enter new character location: ")
-            abilities = (input("Enter new character abilities, seperated by commas: "))
-            character.name = name
-            character.location = location
-            character.abilities = abilities
-            character.update()
-            print('Success:')
-            print_character(character)
-        except Exception as exc:
-            print(f'Error updating character: {exc}')
+def add_battle():
+    aggressor = input("Enter aggressor name: ")
+    defender = input("Enter defender name: ")
+    location = input("Enter battle location: ")
+    try:
+        battle = Battle.create(id_from_name(aggressor), id_from_name(defender), location)
+        print_battle(battle)
+    except Exception as exc:
+        print(f'Error creating battle: {exc}')
+
+def delete_battle():
+    list_battles()
+    n = input("Enter the battle number to delete: ")
+    if battle := Battle.find_by_id(n):
+        battle.delete()
+        print(f'Battle number {n} deleted')
     else:
-        print(f'{name} not found')
+        print(f'Battle number {n} not found')
 
 def update_battle():
-    n = input("Enter the battle number: ")
+    list_battles()
+    n = input("Enter the battle number to update: ")
     if battle := Battle.find_by_id(n):
         print_battle(battle)
         try:
