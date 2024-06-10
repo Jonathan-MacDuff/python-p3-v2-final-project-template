@@ -118,7 +118,6 @@ class Battle():
         self.id = None
 
     def aggressor(self):
-        from models.character import Character
         sql = """
             SELECT *
             FROM characters
@@ -129,7 +128,6 @@ class Battle():
         return Character.instance_from_db(row)
     
     def defender(self):
-        from models.character import Character
         sql = """
             SELECT *
             FROM characters
