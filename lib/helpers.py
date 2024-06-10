@@ -2,34 +2,19 @@
 from models.character import Character
 from models.battle import Battle
 
-# remove
-def name_from_id(id_):
-    return Character.find_by_id(id_).name
-
-def id_from_name(name):
-    return Character.find_by_name(name).id
-#
-
-# make take a battle instance
-def find_victor(id_1, id_2):
-    aggressor = Character.find_by_id(id_1)
-    defender = Character.find_by_id(id_2)
-#    battle.aggressor().abilities...
-    if len(aggressor.abilities.split(', ')) < len(defender.abilities.split(', ')):
-        return defender.name
-    elif len(aggressor.abilities.split(', ')) > len(defender.abilities.split(', ')):
-        return aggressor.name
+def find_victor(battle):
+    if len(battle.aggressor().abilities.split(', ')) < len(battle.defender().abilities.split(', ')):
+        return battle.defender().name
+    elif len(battle.aggressor().abilities.split(', ')) > len(battle.defender().abilities.split(', ')):
+        return battle.aggressor().name
     else:
         return "Draw"
-#
 
 def print_character(character):
     print(f'{character.name} lives in/on {character.location}. Their abilities include: {character.abilities}.')
 
-# make aggressor and defender names instance methods
 def print_battle(battle):
-    print(f'Battle number {battle.id}: {name_from_id(battle.aggressor_id)} attacked {name_from_id(battle.defender_id)} in/on {battle.location}. {find_victor(battle.aggressor_id, battle.defender_id)} was the victor.')
-#
+    print(f'Battle number {battle.id}: {battle.aggressor().name} attacked {battle.defender().name} in/on {battle.location}. {find_victor(battle)} was the victor.')
 
 def character_choice():
     characters = Character.get_all()
@@ -115,7 +100,7 @@ def add_battle():
     defender = input("Enter defender name: ")
     location = input("Enter battle location: ")
     try:
-        battle = Battle.create(id_from_name(aggressor), id_from_name(defender), location)
+        battle = Battle.create(Character.find_by_name(aggressor).id, Character.find_by_name(defender).id, location)
         print_battle(battle)
     except Exception as exc:
         print(f'Error creating battle: {exc}')
@@ -138,8 +123,8 @@ def update_battle():
             aggressor = input("Enter new aggressor name: ")
             defender = input("Enter new defender name: ")
             location = input("Enter new battle location: ")
-            battle.aggressor_id = id_from_name(aggressor)
-            battle.defender_id = id_from_name(defender)
+            battle.aggressor_id = Character.find_by_name(aggressor).id
+            battle.defender_id = Character.find_by_name(defender).id
             battle.location = location
             battle.update()
             print('Success:')

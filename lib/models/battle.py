@@ -116,3 +116,25 @@ class Battle():
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
         self.id = None
+
+    def aggressor(self):
+        from models.character import Character
+        sql = """
+            SELECT *
+            FROM characters
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.aggressor_id,),)
+        row = CURSOR.fetchone()
+        return Character.instance_from_db(row)
+    
+    def defender(self):
+        from models.character import Character
+        sql = """
+            SELECT *
+            FROM characters
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.defender_id,),)
+        row = CURSOR.fetchone()
+        return Character.instance_from_db(row)
