@@ -126,3 +126,15 @@ class Character:
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
         self.id = None
+
+    def battles(self):
+        from models.battle import Battle
+        sql = """
+            SELECT *
+            FROM battles
+            WHERE aggressor_id = ?
+            OR defender_id = ?
+        """
+        CURSOR.execute(sql, (self.id, self.id,),)
+        rows = CURSOR.fetchall()
+        return [Battle.instance_from_db(row) for row in rows]

@@ -2,37 +2,34 @@
 from models.character import Character
 from models.battle import Battle
 
+# remove
 def name_from_id(id_):
     return Character.find_by_id(id_).name
 
 def id_from_name(name):
     return Character.find_by_name(name).id
+#
 
+# make take a battle instance
 def find_victor(id_1, id_2):
     aggressor = Character.find_by_id(id_1)
     defender = Character.find_by_id(id_2)
+#    battle.aggressor().abilities...
     if len(aggressor.abilities.split(', ')) < len(defender.abilities.split(', ')):
         return defender.name
     elif len(aggressor.abilities.split(', ')) > len(defender.abilities.split(', ')):
         return aggressor.name
     else:
         return "Draw"
-    
-def all_character_battles(character):
-        battles = []
-        for battle in Battle.get_all():
-            if battle.aggressor_id == character.id or battle.defender_id == character.id:
-                battles.append(battle)
-        return battles
-    
-def character_battle_count(character):
-    return len(all_character_battles(character))
-    
+#
+
 def print_character(character):
     print(f'{character.name} lives in/on {character.location}. Their abilities include: {character.abilities}.')
 
+# make aggressor and defender names instance methods
 def print_battle(battle):
     print(f'Battle number {battle.id}: {name_from_id(battle.aggressor_id)} attacked {name_from_id(battle.defender_id)} in/on {battle.location}. {find_victor(battle.aggressor_id, battle.defender_id)} was the victor.')
+#
 
 def character_choice():
     characters = Character.get_all()
@@ -56,7 +53,7 @@ def display_character(character):
         print(character.name)
         print(f'Location: {character.location}')
         print(f'Abilities: {character.abilities}')
-        print(f'Total battles: {character_battle_count(character)}')
+        print(f'Total battles: {len(character.battles())}')
 
 def update_character(character):
     try:
@@ -71,18 +68,17 @@ def update_character(character):
         print_character(character)
     except Exception as exc:
         print(f'Error updating character: {exc}')
-
+#
 def delete_character(character):
     confirm = input("This will also delete all battles involving this character. Please enter \"delete\" to confirm: ")
     if confirm.lower() == "delete":
-        character_battles = all_character_battles(character)
-        for battle in character_battles:
+        for battle in character.battles():
             battle.delete()
         character.delete()
         print(f'Success: {character.name} deleted')
     else:
         print("Deletion canceled")
-
+#
 def add_character():
     name = input("Enter character name: ")
     location = input("Enter character location: ")
